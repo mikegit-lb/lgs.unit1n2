@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>8th Grade English - 1st Semester 1st Written Exam (MEB & LGS)</title>
+  <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
+  <style>
+    @media print {
+      body {
+        background: white !important;
+        color: black !important;
+        padding: 0 !important;
+      }
+      .no-print {
+        display: none !important;
+      }
+      .page-break {
+        page-break-before: always;
+      }
+      .exam-container {
+        box-shadow: none !important;
+        border: 1px solid #111 !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        padding: 10mm !important;
+        margin: 0 !important;
+      }
+      input, textarea, select {
+        border-bottom: 1px dotted #444 !important;
+        background: transparent !important;
+      }
+    }
+  </style>
+</head>
+<body class="bg-slate-100 text-slate-800 antialiased min-h-screen py-4 px-2 sm:px-4 lg:px-8">
+
+  <!-- TOP ACTION BAR (Sticky & Full Width) -->
+  <header class="w-full max-w-[1650px] mx-auto mb-4 bg-white p-3.5 sm:p-4 rounded-xl shadow-sm border border-slate-200 no-print flex flex-wrap items-center justify-between gap-4">
+    <div class="flex items-center gap-3.5">
+      <div class="w-11 h-11 rounded-xl bg-red-600 text-white flex items-center justify-center font-black text-xl shadow-sm tracking-tighter">
+        MEB
+      </div>
+      <div>
+        <div class="flex items-center gap-2">
+          <span class="bg-red-100 text-red-700 text-[10px] font-extrabold px-2 py-0.5 rounded tracking-wide uppercase">2026 Müfredatı</span>
+          <span class="bg-indigo-100 text-indigo-700 text-[10px] font-extrabold px-2 py-0.5 rounded tracking-wide uppercase">LGS Yeni Nesil Sınav Modülü</span>
+        </div>
+        <h1 class="font-extrabold text-slate-900 leading-tight text-base sm:text-lg">8. Sınıf İngilizce 1. Dönem 1. Yazılı Sınavı</h1>
+        <p class="text-xs text-slate-500 font-medium">Unit 1: Friendship & Unit 2: Teen Life • İnteraktif Sınav ve Çalışma Sayfası</p>
+      </div>
+    </div>
+    
+    <div class="flex flex-wrap items-center gap-2.5">
+      <button onclick="calculateScore()" class="px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white text-xs font-bold rounded-lg shadow-sm transition flex items-center gap-2 cursor-pointer">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+        <span>Testi Puanla (Check Score)</span>
+      </button>
+
+      <button onclick="toggleAnswerKey()" id="btnToggleKey" class="px-3.5 py-2.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-xs font-bold rounded-lg border border-indigo-200 transition flex items-center gap-1.5 cursor-pointer">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+        <span id="btnKeyText">Cevap Anahtarını Göster</span>
+      </button>
+
+      <button onclick="window.print()" class="px-3.5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-lg border border-slate-300 transition flex items-center gap-1.5 cursor-pointer">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
+        <span>Yazdır (Print A4)</span>
+      </button>
+
+      <button onclick="resetExam()" class="px-3 py-2.5 text-slate-500 hover:text-slate-800 text-xs font-medium transition cursor-pointer">
+        Temizle (Reset)
+      </button>
+    </div>
+  </header>
+
+  <!-- SCORE NOTIFICATION BANNER -->
+  <div id="scoreBanner" class="w-full max-w-[1650px] mx-auto mb-4 hidden p-4 bg-emerald-50 border-2 border-emerald-500 rounded-xl no-print shadow-sm">
+    <div class="flex flex-col md:flex-row items-center justify-between gap-4">
+      <div class="flex items-center gap-4">
+        <div class="w-14 h-14 rounded-full bg-emerald-600 text-white font-black text-2xl flex items-center justify-center shadow">
+          <span id="scoreBadge">0</span>
+        </div>
+        <div>
+          <h3 class="font-bold text-slate-900 text-lg">Sınav Değerlendirme Sonucunuz: <span id="scoreText" class="text-emerald-700">0 / 100 Puan</span></h3>
+          <p id="scoreFeedback" class="text-xs text-slate-600 font-medium">Soruların yanındaki dönütleri ve çözümleri inceleyebilirsiniz.</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-3 text-xs">
+        <span class="text-slate-500">Bölüm Puanları: <b>Kelime:</b> <span id="subScoreVocab">0/35</span> | <b>LGS Okuma:</b> <span id="subScoreLgs">0/25</span> | <b>Yazma:</b> <span id="subScoreWriting">0/30</span></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN FULL-PAGE EXAM CONTAINER -->
+  <main class="exam-container w-full max-w-[1650px] mx-auto bg-white border-2 border-slate-900 rounded-2xl shadow-xl p-4 sm:p-8 lg:p-10 relative">
+
+    <!-- OFFICIAL MEB EXAM HEADER -->
+    <section class="border-b-2 border-slate-900 pb-5 mb-8">
+      <div class="text-center space-y-1 mb-5">
+        <div class="flex items-center justify-center gap-2 mb-1.5">
+          <div class="w-7 h-7 rounded-full bg-red-700 text-white font-serif font-black flex items-center justify-center text-xs shadow-xs">TC</div>
+          <span class="text-xs sm:text-sm font-extrabold tracking-widest text-slate-900 uppercase">T.C. MİLLÎ EĞİTİM BAKANLIĞI</span>
+        </div>
+        <h2 class="text-xs sm:text-sm font-extrabold uppercase tracking-wide text-slate-700">2026–2027 EĞİTİM VE ÖĞRETİM YILI</h2>
+        <h1 class="text-lg sm:text-2xl font-black uppercase text-slate-900 tracking-tight">8. SINIF İNGİLİZCE DERSİ 1. DÖNEM 1. YAZILI SINAVI</h1>
+        <p class="text-xs font-semibold text-slate-600 tracking-wide uppercase">(Unit 1: Friendship & Unit 2: Teen Life • Ortak Sınav Formatı)</p>
+      </div>
+
+      <!-- STUDENT INFO STRIP (WIDE GRID) -->
+      <div class="grid grid-cols-2 md:grid-cols-5 gap-3 text-xs font-semibold border-2 border-slate-800 rounded-xl p-3 bg-slate-50 items-center">
+        <div class="flex items-center gap-2 col-span-2 md:col-span-1">
+          <span class="text-slate-600 whitespace-nowrap">Adı Soyadı:</span>
+          <input type="text" placeholder="Öğrenci Adı Soyadı" class="w-full bg-transparent border-b border-dashed border-slate-400 focus:outline-none focus:border-slate-900 py-0.5 font-bold text-slate-900">
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="text-slate-600 whitespace-nowrap">Sınıfı / Şube:</span>
+          <input type="text" placeholder="8 / A" class="w-20 bg-transparent border-b border-dashed border-slate-400 focus:outline-none focus:border-slate-900 py-0.5 text-center font-bold text-slate-900">
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="text-slate-600 whitespace-nowrap">Okul No:</span>
+          <input type="text" placeholder="1042" class="w-24 bg-transparent border-b border-dashed border-slate-400 focus:outline-none focus:border-slate-900 py-0.5 text-center font-bold text-slate-900">
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="text-slate-600 whitespace-nowrap">Tarih:</span>
+          <input type="text" value="___ / ___ / 2026" class="w-28 bg-transparent border-b border-dashed border-slate-400 focus:outline-none focus:border-slate-900 py-0.5 text-center font-bold text-slate-700">
+        </div>
+        <div class="flex items-center justify-end gap-2 border-t md:border-t-0 md:border-l-2 border-slate-300 md:pl-4 pt-2 md:pt-0 col-span-2 md:col-span-1">
+          <span class="text-red-700 font-extrabold uppercase text-xs">ALDIĞI NOT:</span>
+          <div class="w-16 h-9 border-2 border-red-700 rounded-lg bg-white flex items-center justify-center font-black text-base text-red-700 shadow-xs" id="headerScoreBox">
+            ---
+          </div>
+        </div>
+      </div>
+
+      <div class="flex flex-wrap justify-between items-center mt-3 text-xs text-slate-500 font-medium px-1">
+        <span>⏱️ <b>Sınav Süresi:</b> 40 Dakika</span>
+        <span>💯 <b>Toplam Puan:</b> 100 Puan</span>
+        <span>📋 <b>Soru Tipi:</b> Kelime, LGS Çoktan Seçmeli & MEB Açık Uçlu</span>
+      </div>
+    </section>
+
+    <!-- ======================================================= -->
+    <!-- PART 1: VOCABULARY BOOSTER (35 POINTS) - 2-COLUMN GRID  -->
+    <!-- ======================================================= -->
+    <section class="mb-10">
+      <div class="flex items-center justify-between bg-slate-900 text-white px-4 py-2 rounded-lg mb-5 shadow-xs">
+        <div class="flex items-center gap-2">
+          <span class="w-6 h-6 rounded bg-red-600 flex items-center justify-center font-bold text-xs">1</span>
+          <h2 class="font-extrabold text-xs sm:text-sm uppercase tracking-wider">PART 1: VOCABULARY & LANGUAGE FUNCTIONS</h2>
+        </div>
+        <span class="text-xs bg-red-600 px-2.5 py-0.5 rounded font-black tracking-wide">35 PUAN</span>
+      </div>
+
+      <!-- 2-COLUMN GRID FOR SECTION A & SECTION B -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+        
+        <!-- SECTION A: PERSONAL TRAITS MATCHING -->
+        <div class="p-4 sm:p-5 border-2 border-slate-200 rounded-xl bg-slate-50 flex flex-col justify-between">
+          <div>
+            <div class="flex justify-between items-center mb-2">
+              <h3 class="font-bold text-sm text-slate-900 flex items-center gap-1.5">
+                <span class="w-5 h-5 rounded-full bg-slate-800 text-white text-[11px] flex items-center justify-center">A</span>
+                Match Personal Traits with Definitions
+              </h3>
+              <span class="text-[11px] bg-white text-slate-700 px-2 py-0.5 rounded font-bold border border-slate-300">5 x 2 = 10 Puan</span>
+            </div>
+            <p class="text-xs text-slate-500 mb-3 italic">Aşağıdaki kişilik özelliklerini kutulardaki harflerle eşleştiriniz.</p>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs mb-3">
+              <!-- Select Column -->
+              <div class="space-y-2">
+                <div class="flex items-center justify-between p-2 bg-white rounded-lg border border-slate-200 shadow-xs">
+                  <span class="font-bold text-slate-800">1. Loyal <span class="text-[10px] text-slate-400 font-normal">(sadık)</span></span>
+                  <select id="trait1" class="border border-slate-300 rounded px-2 py-1 bg-slate-50 font-bold text-slate-800 focus:outline-none focus:ring-1 focus:ring-slate-800">
+                    <option value="">Seç</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option>
+                  </select>
+                </div>
+                <div class="flex items-center justify-between p-2 bg-white rounded-lg border border-slate-200 shadow-xs">
+                  <span class="font-bold text-slate-800">2. Generous <span class="text-[10px] text-slate-400 font-normal">(cömert)</span></span>
+                  <select id="trait2" class="border border-slate-300 rounded px-2 py-1 bg-slate-50 font-bold text-slate-800 focus:outline-none focus:ring-1 focus:ring-slate-800">
+                    <option value="">Seç</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option>
+                  </select>
+                </div>
+                <div class="flex items-center justify-between p-2 bg-white rounded-lg border border-slate-200 shadow-xs">
+                  <span class="font-bold text-slate-800">3. Arrogant <span class="text-[10px] text-slate-400 font-normal">(kibirli)</span></span>
+                  <select id="trait3" class="border border-slate-300 rounded px-2 py-1 bg-slate-50 font-bold text-slate-800 focus:outline-none focus:ring-1 focus:ring-slate-800">
+                    <option value="">Seç</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option>
+                  </select>
+                </div>
+                <div class="flex items-center justify-between p-2 bg-white rounded-lg border border-slate-200 shadow-xs">
+                  <span class="font-bold text-slate-800">4. Honest <span class="text-[10px] text-slate-400 font-normal">(dürüst)</span></span>
+                  <select id="trait4" class="border border-slate-300 rounded px-2 py-1 bg-slate-50 font-bold text-slate-800 focus:outline-none focus:ring-1 focus:ring-slate-800">
+                    <option value="">Seç</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option>
+                  </select>
+                </div>
+                <div class="flex items-center justify-between p-2 bg-white rounded-lg border border-slate-200 shadow-xs">
+                  <span class="font-bold text-slate-800">5. Sneaky <span class="text-[10px] text-slate-400 font-normal">(sinsi)</span></span>
+                  <select id="trait5" class="border border-slate-300 rounded px-2 py-1 bg-slate-50 font-bold text-slate-800 focus:outline-none focus:ring-1 focus:ring-slate-800">
+                    <option value="">Seç</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- Definitions Box -->
+              <div class="space-y-1.5 bg-amber-50/70 p-3 rounded-lg border border-amber-200 text-slate-700 text-[11px] leading-relaxed">
+                <p><b class="text-amber-900">A.</b> Always telling truth; never lies.</p>
+                <p><b class="text-amber-900">B.</b> Believing you're better than others.</p>
+                <p><b class="text-amber-900">C.</b> Giving help or money freely.</p>
+                <p><b class="text-amber-900">D.</b> Faithful; supporting friends always.</p>
+                <p><b class="text-amber-900">E.</b> Secret and dishonest behind back.</p>
+              </div>
+            </div>
+          </div>
+          <div id="traitFeedback" class="mt-2 text-xs hidden p-2.5 rounded font-medium"></div>
+        </div>
+
+        <!-- SECTION B: PHRASAL VERBS & COLLOCATIONS -->
+        <div class="p-4 sm:p-5 border-2 border-slate-200 rounded-xl bg-slate-50 flex flex-col justify-between">
+          <div>
+            <div class="flex justify-between items-center mb-2">
+              <h3 class="font-bold text-sm text-slate-900 flex items-center gap-1.5">
+                <span class="w-5 h-5 rounded-full bg-slate-800 text-white text-[11px] flex items-center justify-center">B</span>
+                Phrasal Verbs & Collocations
+              </h3>
+              <span class="text-[11px] bg-white text-slate-700 px-2 py-0.5 rounded font-bold border border-slate-300">5 x 2 = 10 Puan</span>
+            </div>
+            
+            <!-- Chips -->
+            <div class="flex flex-wrap gap-1.5 p-2 bg-blue-50 border border-blue-200 rounded-lg text-xs font-semibold text-blue-900 mb-3 justify-center">
+              <span class="bg-white px-2 py-0.5 rounded border border-blue-200 shadow-xs">back up</span>
+              <span class="bg-white px-2 py-0.5 rounded border border-blue-200 shadow-xs">count on</span>
+              <span class="bg-white px-2 py-0.5 rounded border border-blue-200 shadow-xs">get on well with</span>
+              <span class="bg-white px-2 py-0.5 rounded border border-blue-200 shadow-xs">have a lot in common</span>
+              <span class="bg-white px-2 py-0.5 rounded border border-blue-200 shadow-xs">keep a secret</span>
+            </div>
+
+            <div class="space-y-2.5 text-xs text-slate-800">
+              <div class="flex flex-wrap items-center gap-1 leading-relaxed bg-white p-2 rounded-lg border border-slate-200">
+                <span>1. True friends always</span>
+                <input type="text" id="pv1" placeholder="write..." class="border-b-2 border-slate-400 bg-slate-50 px-2 py-0.5 rounded font-bold focus:border-slate-900 focus:outline-none w-28 text-center text-xs">
+                <span>you in tough times.</span>
+              </div>
+
+              <div class="flex flex-wrap items-center gap-1 leading-relaxed bg-white p-2 rounded-lg border border-slate-200">
+                <span>2. Ayşe will always</span>
+                <input type="text" id="pv2" placeholder="write..." class="border-b-2 border-slate-400 bg-slate-50 px-2 py-0.5 rounded font-bold focus:border-slate-900 focus:outline-none w-32 text-center text-xs">
+                <span>and never tells anyone.</span>
+              </div>
+
+              <div class="flex flex-wrap items-center gap-1 leading-relaxed bg-white p-2 rounded-lg border border-slate-200">
+                <span>3. Mark and Leo still</span>
+                <input type="text" id="pv3" placeholder="write..." class="border-b-2 border-slate-400 bg-slate-50 px-2 py-0.5 rounded font-bold focus:border-slate-900 focus:outline-none w-32 text-center text-xs">
+                <span>each other.</span>
+              </div>
+
+              <div class="flex flex-wrap items-center gap-1 leading-relaxed bg-white p-2 rounded-lg border border-slate-200">
+                <span>4. You can always</span>
+                <input type="text" id="pv4" placeholder="write..." class="border-b-2 border-slate-400 bg-slate-50 px-2 py-0.5 rounded font-bold focus:border-slate-900 focus:outline-none w-28 text-center text-xs">
+                <span>Robert; he is reliable.</span>
+              </div>
+
+              <div class="flex flex-wrap items-center gap-1 leading-relaxed bg-white p-2 rounded-lg border border-slate-200">
+                <span>5. We share many hobbies, so we</span>
+                <input type="text" id="pv5" placeholder="write..." class="border-b-2 border-slate-400 bg-slate-50 px-2 py-0.5 rounded font-bold focus:border-slate-900 focus:outline-none w-40 text-center text-xs">
+                <span>.</span>
+              </div>
+            </div>
+          </div>
+          <div id="pvFeedback" class="mt-2 text-xs hidden p-2.5 rounded font-medium"></div>
+        </div>
+
+      </div>
+
+      <!-- SECTION C: TEEN LIFE PREFERENCES & FREQUENCY (FULL WIDTH 5-GRID) -->
+      <div class="p-4 sm:p-5 border-2 border-slate-200 rounded-xl bg-slate-50">
+        <div class="flex justify-between items-center mb-3">
+          <h3 class="font-bold text-sm text-slate-900 flex items-center gap-1.5">
+            <span class="w-5 h-5 rounded-full bg-slate-800 text-white text-[11px] flex items-center justify-center">C</span>
+            Unit 2: Teen Life – Preferences, Routines & Adverbs
+          </h3>
+          <span class="text-[11px] bg-white text-slate-700 px-2 py-0.5 rounded font-bold border border-slate-300">5 x 3 = 15 Puan</span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-3 text-xs">
+          <!-- Item 1 -->
+          <div class="p-3 bg-white rounded-lg border border-slate-200 flex flex-col justify-between shadow-xs">
+            <p class="font-medium text-slate-800 mb-2">1. Defne is really <b>[...]</b> classical music; she plays violin daily.</p>
+            <div class="space-y-1 pt-2 border-t border-slate-100">
+              <label class="flex items-center gap-2 cursor-pointer p-1 rounded hover:bg-slate-50">
+                <input type="radio" name="pref1" value="keen on" class="text-slate-800">
+                <span class="font-semibold">keen on</span>
+              </label>
+              <label class="flex items-center gap-2 cursor-pointer p-1 rounded hover:bg-slate-50">
+                <input type="radio" name="pref1" value="can't stand" class="text-slate-800">
+                <span>can't stand</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Item 2 -->
+          <div class="p-3 bg-white rounded-lg border border-slate-200 flex flex-col justify-between shadow-xs">
+            <p class="font-medium text-slate-800 mb-2">2. Heavy metal is <b>[...]</b>; screaming gives me a headache.</p>
+            <div class="space-y-1 pt-2 border-t border-slate-100">
+              <label class="flex items-center gap-2 cursor-pointer p-1 rounded hover:bg-slate-50">
+                <input type="radio" name="pref2" value="unbearable" class="text-slate-800">
+                <span class="font-semibold">unbearable</span>
+              </label>
+              <label class="flex items-center gap-2 cursor-pointer p-1 rounded hover:bg-slate-50">
+                <input type="radio" name="pref2" value="impressive" class="text-slate-800">
+                <span>impressive</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Item 3 -->
+          <div class="p-3 bg-white rounded-lg border border-slate-200 flex flex-col justify-between shadow-xs">
+            <p class="font-medium text-slate-800 mb-2">3. Teens prefer digital music <b>[...]</b> buying physical CDs.</p>
+            <div class="space-y-1 pt-2 border-t border-slate-100">
+              <label class="flex items-center gap-2 cursor-pointer p-1 rounded hover:bg-slate-50">
+                <input type="radio" name="pref3" value="to" class="text-slate-800">
+                <span class="font-semibold">to</span>
+              </label>
+              <label class="flex items-center gap-2 cursor-pointer p-1 rounded hover:bg-slate-50">
+                <input type="radio" name="pref3" value="than" class="text-slate-800">
+                <span>than</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Item 4 -->
+          <div class="p-3 bg-white rounded-lg border border-slate-200 flex flex-col justify-between shadow-xs">
+            <p class="font-medium text-slate-800 mb-2">4. Kerem hates early mornings. He (0%) <b>[...]</b> wakes up early.</p>
+            <div class="space-y-1 pt-2 border-t border-slate-100">
+              <label class="flex items-center gap-2 cursor-pointer p-1 rounded hover:bg-slate-50">
+                <input type="radio" name="pref4" value="never" class="text-slate-800">
+                <span class="font-semibold">never (0%)</span>
+              </label>
+              <label class="flex items-center gap-2 cursor-pointer p-1 rounded hover:bg-slate-50">
+                <input type="radio" name="pref4" value="always" class="text-slate-800">
+                <span>always</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Item 5 -->
+          <div class="p-3 bg-white rounded-lg border border-slate-200 flex flex-col justify-between shadow-xs">
+            <p class="font-medium text-slate-800 mb-2">5. Selin loves books. She (100%) <b>[...]</b> reads before sleep.</p>
+            <div class="space-y-1 pt-2 border-t border-slate-100">
+              <label class="flex items-center gap-2 cursor-pointer p-1 rounded hover:bg-slate-50">
+                <input type="radio" name="pref5" value="always" class="text-slate-800">
+                <span class="font-semibold">always (100%)</span>
+              </label>
+              <label class="flex items-center gap-2 cursor-pointer p-1 rounded hover:bg-slate-50">
+                <input type="radio" name="pref5" value="rarely" class="text-slate-800">
+                <span>rarely</span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <div id="prefFeedback" class="mt-3 text-xs hidden p-2.5 rounded font-medium"></div>
+      </div>
+    </section>
+
+    <!-- ========================================================================= -->
+    <!-- PART 2: READING & COMPREHENSION (LGS YENİ NESİL) (25 POINTS) - WIDE GRID  -->
+    <!-- ========================================================================= -->
+    <section class="mb-10 page-break">
+      <div class="flex items-center justify-between bg-slate-900 text-white px-4 py-2 rounded-lg mb-5 shadow-xs">
+        <div class="flex items-center gap-2">
+          <span class="w-6 h-6 rounded bg-red-600 flex items-center justify-center font-bold text-xs">2</span>
+          <h2 class="font-extrabold text-xs sm:text-sm uppercase tracking-wider">PART 2: READING COMPREHENSION & VISUAL LITERACY (LGS YENİ NESİL)</h2>
+        </div>
+        <span class="text-xs bg-red-600 px-2.5 py-0.5 rounded font-black tracking-wide">5 x 5 = 25 PUAN</span>
+      </div>
+
+      <!-- TEXT 1 BLOCK (INVITATION + CHAT + QUESTIONS 1 & 2) -->
+      <div class="p-4 sm:p-6 border-2 border-slate-300 rounded-xl bg-slate-50/50 mb-8">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch mb-6">
+          
+          <!-- Event Poster (5 Cols) -->
+          <div class="lg:col-span-5 bg-white border-2 border-emerald-600 rounded-xl p-4 shadow-sm text-center flex flex-col justify-between">
+            <div>
+              <span class="inline-block bg-emerald-600 text-white text-[10px] font-extrabold px-2.5 py-0.5 rounded-full uppercase tracking-wider mb-2">
+                Green Valley Youth Club
+              </span>
+              <h4 class="font-black text-slate-900 text-base uppercase border-b-2 border-slate-100 pb-2 mb-3">AUTUMN CYCLING & CAMP TOUR</h4>
+              <p class="text-xs text-slate-600 mb-4 italic leading-relaxed">
+                "Join us for an exciting weekend ride to explore nature, breathe fresh pine air and sit around campfire!"
+              </p>
+
+              <div class="text-left text-xs space-y-2 bg-emerald-50/70 p-3 rounded-lg border border-emerald-200">
+                <div class="flex items-center gap-2"><span class="font-bold text-emerald-950 w-24">📅 Date:</span><span>Saturday, October 24, 2026</span></div>
+                <div class="flex items-center gap-2"><span class="font-bold text-emerald-950 w-24">⏰ Time:</span><span>09:30 AM – 05:00 PM</span></div>
+                <div class="flex items-center gap-2"><span class="font-bold text-emerald-950 w-24">📍 Location:</span><span>Pine Forest National Park</span></div>
+                <div class="flex items-center gap-2"><span class="font-bold text-emerald-950 w-24">💵 Fee:</span><span class="font-bold text-emerald-900">$15 per person (Lunch included)</span></div>
+              </div>
+            </div>
+
+            <div class="mt-4 pt-3 border-t border-slate-200 text-[11px] text-slate-600 text-left space-y-1">
+              <p class="text-red-700 font-bold">⚠️ Note: Bring your own bicycle and helmet!</p>
+              <p>📩 Inform the organizer until October 20, 2026 (RSVP).</p>
+            </div>
+          </div>
+
+          <!-- WhatsApp Chat Box (7 Cols) -->
+          <div class="lg:col-span-7 bg-[#efeae2] border border-slate-300 rounded-xl p-3 sm:p-4 shadow-inner flex flex-col justify-between text-xs">
+            <div class="bg-[#075e54] text-white px-3.5 py-2 rounded-lg font-semibold flex items-center justify-between text-xs shadow-xs mb-2">
+              <span class="flex items-center gap-2">💬 8-A Class Mates (WhatsApp Group)</span>
+              <span class="text-[10px] bg-emerald-700/80 px-2 py-0.5 rounded text-emerald-100">4 Online</span>
+            </div>
+
+            <div class="space-y-2.5 py-2 overflow-y-auto max-h-72 pr-1">
+              <div class="bg-white p-2.5 rounded-lg shadow-xs max-w-[85%] border border-slate-200">
+                <p class="font-bold text-emerald-800 text-[11px]">Mark (Organizer)</p>
+                <p class="text-slate-800 text-xs">Hey buddies! Check out our cycling tour poster above. Who would like to join us this Saturday?</p>
+              </div>
+
+              <div class="bg-[#dcf8c6] p-2.5 rounded-lg shadow-xs max-w-[85%] ml-auto border border-emerald-200">
+                <p class="font-bold text-slate-800 text-[11px] text-right">Brian</p>
+                <p class="text-slate-800 text-xs">Sounds fantastic! Cycling is my favorite sport. Count me in!</p>
+              </div>
+
+              <div class="bg-white p-2.5 rounded-lg shadow-xs max-w-[85%] border border-slate-200">
+                <p class="font-bold text-pink-700 text-[11px]">Chloe</p>
+                <p class="text-slate-800 text-xs">I'd love to be there, but my cousin is getting married on Saturday afternoon, so I have to attend the wedding.</p>
+              </div>
+
+              <div class="bg-white p-2.5 rounded-lg shadow-xs max-w-[85%] border border-slate-200">
+                <p class="font-bold text-blue-700 text-[11px]">Denis</p>
+                <p class="text-slate-800 text-xs">Thanks for inviting me Mark, but I can't stand outdoor sports. Spending seven hours in the woods sounds unbearable to me.</p>
+              </div>
+
+              <div class="bg-white p-2.5 rounded-lg shadow-xs max-w-[85%] border border-slate-200">
+                <p class="font-bold text-purple-700 text-[11px]">Emma</p>
+                <p class="text-slate-800 text-xs">Sounds like great fun! But could you tell me how we are going to travel to Pine Forest? Will there be a school bus?</p>
+              </div>
+            </div>
+            <div class="text-[11px] text-slate-500 text-center italic mt-1">End of chat message group</div>
+          </div>
+
+        </div>
+
+        <!-- Question 1 & Question 2 Side-by-Side (2 Columns) -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 pt-4 border-t-2 border-slate-200">
+          <!-- Question 1 -->
+          <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-xs flex flex-col justify-between">
+            <div>
+              <p class="font-bold text-xs sm:text-sm text-slate-900 mb-3 flex items-start gap-2">
+                <span class="inline-flex bg-slate-900 text-white w-6 h-6 text-center items-center justify-center rounded-full text-xs font-bold shrink-0">1</span>
+                According to the conversation above, who refuses the invitation by giving an excuse?
+              </p>
+              <div class="grid grid-cols-2 gap-2 text-xs">
+                <label class="p-2.5 border rounded-lg cursor-pointer hover:bg-slate-50 flex items-center gap-2">
+                  <input type="radio" name="lgs1" value="A"> <span><b>A)</b> Brian</span>
+                </label>
+                <label class="p-2.5 border rounded-lg cursor-pointer hover:bg-slate-50 flex items-center gap-2">
+                  <input type="radio" name="lgs1" value="B"> <span><b>B)</b> Chloe</span>
+                </label>
+                <label class="p-2.5 border rounded-lg cursor-pointer hover:bg-slate-50 flex items-center gap-2">
+                  <input type="radio" name="lgs1" value="C"> <span><b>C)</b> Denis</span>
+                </label>
+                <label class="p-2.5 border rounded-lg cursor-pointer hover:bg-slate-50 flex items-center gap-2">
+                  <input type="radio" name="lgs1" value="D"> <span><b>D)</b> Emma</span>
+                </label>
+              </div>
+            </div>
+            <div id="lgs1Exp" class="mt-3 text-xs hidden p-3 rounded-lg font-medium"></div>
+          </div>
+
+          <!-- Question 2 -->
+          <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-xs flex flex-col justify-between">
+            <div>
+              <p class="font-bold text-xs sm:text-sm text-slate-900 mb-3 flex items-start gap-2">
+                <span class="inline-flex bg-slate-900 text-white w-6 h-6 text-center items-center justify-center rounded-full text-xs font-bold shrink-0">2</span>
+                Which of the following questions DOES NOT have an answer in the invitation card?
+              </p>
+              <div class="space-y-2 text-xs">
+                <label class="p-2 border rounded-lg cursor-pointer hover:bg-slate-50 flex items-center gap-2 block">
+                  <input type="radio" name="lgs2" value="A"> <span><b>A)</b> What is the deadline for letting the organizer know?</span>
+                </label>
+                <label class="p-2 border rounded-lg cursor-pointer hover:bg-slate-50 flex items-center gap-2 block">
+                  <input type="radio" name="lgs2" value="B"> <span><b>B)</b> What kind of personal equipment must participants bring?</span>
+                </label>
+                <label class="p-2 border rounded-lg cursor-pointer hover:bg-slate-50 flex items-center gap-2 block">
+                  <input type="radio" name="lgs2" value="C"> <span><b>C)</b> How will the participants travel from their school to Pine Forest?</span>
+                </label>
+                <label class="p-2 border rounded-lg cursor-pointer hover:bg-slate-50 flex items-center gap-2 block">
+                  <input type="radio" name="lgs2" value="D"> <span><b>D)</b> How much does a person have to pay for the event?</span>
+                </label>
+              </div>
+            </div>
+            <div id="lgs2Exp" class="mt-3 text-xs hidden p-3 rounded-lg font-medium"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TEXT 2 BLOCK (SURVEY TABLES + QUESTIONS 3, 4, 5) -->
+      <div class="p-4 sm:p-6 border-2 border-slate-300 rounded-xl bg-slate-50/50">
+        <div class="mb-4">
+          <span class="bg-indigo-700 text-white text-[10px] font-bold px-2.5 py-0.5 rounded uppercase tracking-wider">Survey Research & Visual Literacy</span>
+          <h4 class="font-bold text-sm text-slate-900 mt-1.5">
+            Dr. Richard surveyed 100 8th-grade teenagers (50 boys and 50 girls) about their free-time activities and music preferences:
+          </h4>
+        </div>
+
+        <!-- Tables Side-by-Side -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+          <!-- Table 1 -->
+          <div class="bg-white p-4 rounded-xl border border-slate-300 shadow-xs">
+            <h5 class="font-bold text-slate-900 border-b pb-2 mb-2 text-center text-xs uppercase tracking-wide">
+              Table 1: Weekend Free-Time Activities
+            </h5>
+            <table class="w-full text-xs text-left">
+              <thead>
+                <tr class="border-b text-slate-500 font-bold">
+                  <th class="py-1.5">Activity</th>
+                  <th class="py-1.5 text-center text-blue-700 font-extrabold">Boys</th>
+                  <th class="py-1.5 text-center text-pink-700 font-extrabold">Girls</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-100 text-slate-700">
+                <tr><td class="py-1.5 font-medium">Outdoor sports (cycling, trekking)</td><td class="text-center font-bold text-blue-900 bg-blue-50/50">46%</td><td class="text-center">18%</td></tr>
+                <tr><td class="py-1.5 font-medium">Playing computer & video games</td><td class="text-center font-bold text-blue-900">32%</td><td class="text-center">14%</td></tr>
+                <tr><td class="py-1.5 font-medium">Attending live music concerts</td><td class="text-center">12%</td><td class="text-center font-bold text-pink-900 bg-pink-50/50">38%</td></tr>
+                <tr><td class="py-1.5 font-medium">Reading books & art exhibitions</td><td class="text-center">10%</td><td class="text-center font-bold text-pink-900">30%</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Table 2 -->
+          <div class="bg-white p-4 rounded-xl border border-slate-300 shadow-xs">
+            <h5 class="font-bold text-slate-900 border-b pb-2 mb-2 text-center text-xs uppercase tracking-wide">
+              Table 2: Music Preferences of Teenagers
+            </h5>
+            <table class="w-full text-xs text-left">
+              <thead>
+                <tr class="border-b text-slate-500 font-bold">
+                  <th class="py-1.5">Music Genre</th>
+                  <th class="py-1.5 text-center text-blue-700 font-extrabold">Boys</th>
+                  <th class="py-1.5 text-center text-pink-700 font-extrabold">Girls</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-100 text-slate-700">
+                <tr><td class="py-1.5 font-medium">Pop music</td><td class="text-center">20%</td><td class="text-center font-bold text-pink-900 bg-pink-50/50">42%</td></tr>
+                <tr><td class="py-1.5 font-medium">Rock & Heavy Metal</td><td class="text-center font-bold text-blue-900 bg-blue-50/50">38%</td><td class="text-center">14%</td></tr>
+                <tr class="bg-amber-50/70 font-semibold"><td class="py-1.5 text-amber-950 font-bold">Rap music</td><td class="text-center font-extrabold text-amber-950">30%</td><td class="text-center font-extrabold text-amber-950">30%</td></tr>
+                <tr><td class="py-1.5 font-medium">Classical music</td><td class="text-center">12%</td><td class="text-center">14%</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Questions 3, 4, 5 (Wide 3-Column Grid) -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+          <!-- Question 3 -->
+          <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-xs flex flex-col justify-between">
+            <div>
+              <p class="font-bold text-xs sm:text-sm text-slate-900 mb-3 flex items-start gap-2">
+                <span class="inline-flex bg-slate-900 text-white w-6 h-6 text-center items-center justify-center rounded-full text-xs font-bold shrink-0">3</span>
+                Which statement is CORRECT according to the tables?
+              </p>
+              <div class="space-y-1.5 text-xs">
+                <label class="p-2 border rounded-lg cursor-pointer hover:bg-slate-50 flex items-center gap-2 block">
+                  <input type="radio" name="lgs3" value="A"> <span><b>A)</b> Exhibitions are more popular among boys.</span>
+                </label>
+                <label class="p-2 border rounded-lg cursor-pointer hover:bg-slate-50 flex items-center gap-2 block">
+                  <input type="radio" name="lgs3" value="B"> <span><b>B)</b> Rap music is equally popular among boys and girls.</span>
+                </label>
+                <label class="p-2 border rounded-lg cursor-pointer hover:bg-slate-50 flex items-center gap-2 block">
+                  <input type="radio" name="lgs3" value="C"> <span><b>C)</b> Over half of girls prefer outdoor sports.</span>
+                </label>
+                <label class="p-2 border rounded-lg cursor-pointer hover:bg-slate-50 flex items-center gap-2 block">
+                  <input type="radio" name="lgs3" value="D"> <span><b>D)</b> Boys are keen on classical more than rock.</span>
+                </label>
+              </div>
+            </div>
+            <div id="lgs3Exp" class="mt-3 text-xs hidden p-2.5 rounded-lg font-medium"></div>
+          </div>
+
+          <!-- Question 4 -->
+          <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-xs flex flex-col justify-between">
+            <div>
+              <p class="font-bold text-xs sm:text-sm text-slate-900 mb-3 flex items-start gap-2">
+                <span class="inline-flex bg-slate-900 text-white w-6 h-6 text-center items-center justify-center rounded-full text-xs font-bold shrink-0">4</span>
+                Whose comment best reflects the tendency of their group?
+              </p>
+              <div class="space-y-1.5 text-xs">
+                <label class="p-2 border rounded-lg cursor-pointer hover:bg-slate-50 flex items-center gap-2 block">
+                  <input type="radio" name="lgs4" value="A"> <span><b>A) Jason (Boy):</b> "I find cycling unbearable; I prefer reading."</span>
+                </label>
+                <label class="p-2 border rounded-lg cursor-pointer hover:bg-slate-50 flex items-center gap-2 block">
+                  <input type="radio" name="lgs4" value="B"> <span><b>B) Aylin (Girl):</b> "I'm crazy about pop music; live concerts are my top hobby."</span>
+                </label>
+                <label class="p-2 border rounded-lg cursor-pointer hover:bg-slate-50 flex items-center gap-2 block">
+                  <input type="radio" name="lgs4" value="C"> <span><b>C) Kevin (Boy):</b> "Rock is too loud; I prefer classical music."</span>
+                </label>
+                <label class="p-2 border rounded-lg cursor-pointer hover:bg-slate-50 flex items-center gap-2 block">
+                  <input type="radio" name="lgs4" value="D"> <span><b>D) Merve (Girl):</b> "Video games are the top activity for girls."</span>
+                </label>
+              </div>
+            </div>
+            <div id="lgs4Exp" class="mt-3 text-xs hidden p-2.5 rounded-lg font-medium"></div>
+          </div>
+
+          <!-- Question 5 -->
+          <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-xs flex flex-col justify-between">
+            <div>
+              <p class="font-bold text-xs sm:text-sm text-slate-900 mb-2 flex items-start gap-2">
+                <span class="inline-flex bg-slate-900 text-white w-6 h-6 text-center items-center justify-center rounded-full text-xs font-bold shrink-0">5</span>
+                Read the dialogue & complete:
+              </p>
+              <div class="bg-slate-50 p-2.5 rounded-lg text-xs border mb-2 font-mono leading-tight">
+                <p><b>Sam:</b> "I can't stand rock music. It is noisy and unbearable. I prefer calmer tunes."</p>
+                <p><b>Kevin:</b> "I totally agree with you. In fact, ___."</p>
+              </div>
+              <div class="space-y-1.5 text-xs">
+                <label class="p-2 border rounded-lg cursor-pointer hover:bg-slate-50 flex items-center gap-2 block">
+                  <input type="radio" name="lgs5" value="A"> <span><b>A)</b> we have nothing in common musically</span>
+                </label>
+                <label class="p-2 border rounded-lg cursor-pointer hover:bg-slate-50 flex items-center gap-2 block">
+                  <input type="radio" name="lgs5" value="B"> <span><b>B)</b> I'm crazy about heavy metal concerts</span>
+                </label>
+                <label class="p-2 border rounded-lg cursor-pointer hover:bg-slate-50 flex items-center gap-2 block">
+                  <input type="radio" name="lgs5" value="C"> <span><b>C)</b> we share same view; classical is much more relaxing</span>
+                </label>
+                <label class="p-2 border rounded-lg cursor-pointer hover:bg-slate-50 flex items-center gap-2 block">
+                  <input type="radio" name="lgs5" value="D"> <span><b>D)</b> you should buy tickets for rock festival</span>
+                </label>
+              </div>
+            </div>
+            <div id="lgs5Exp" class="mt-3 text-xs hidden p-2.5 rounded-lg font-medium"></div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ======================================================================== -->
+    <!-- PART 3: MEB OPEN-ENDED SCENARIOS (30 POINTS) - 3-COLUMN SIDE-BY-SIDE GRID -->
+    <!-- ======================================================================== -->
+    <section class="mb-10 page-break">
+      <div class="flex items-center justify-between bg-slate-900 text-white px-4 py-2 rounded-lg mb-5 shadow-xs">
+        <div class="flex items-center gap-2">
+          <span class="w-6 h-6 rounded bg-red-600 flex items-center justify-center font-bold text-xs">3</span>
+          <h2 class="font-extrabold text-xs sm:text-sm uppercase tracking-wider">PART 3: MEB OPEN-ENDED SCENARIO WRITING (AÇIK UÇLU SORULAR)</h2>
+        </div>
+        <span class="text-xs bg-red-600 px-2.5 py-0.5 rounded font-black tracking-wide">3 x 10 = 30 PUAN</span>
+      </div>
+
+      <!-- 3-COLUMN RESPONSIVE GRID -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+        <!-- SCENARIO 1 -->
+        <div class="p-4 sm:p-5 border-2 border-slate-300 rounded-xl bg-slate-50/70 flex flex-col justify-between">
+          <div>
+            <div class="flex justify-between items-center mb-2">
+              <h3 class="font-bold text-xs sm:text-sm text-slate-900">Scenario 1: Refusing & Excuse</h3>
+              <span class="text-[11px] bg-red-100 text-red-700 px-2 py-0.5 rounded font-black">10 Puan</span>
+            </div>
+            
+            <div class="bg-amber-50 border-l-4 border-amber-500 p-2.5 rounded text-[11px] text-slate-700 mb-3 leading-relaxed">
+              <p><b>Durum:</b> Jack seni bu Cuma 19:00'da evinde PlayStation gecesine çağırdı. Kuzenin başka şehirden geleceği için aile yemeğine katılman gerekiyor.</p>
+              <p class="mt-1 font-semibold text-slate-900"><b>Görev:</b> Jack'e 25–35 kelimelik kısa bir mesaj yaz: Teşekkür et, nazikçe reddet, mazeret bildir, başka zaman için randevulaş.</p>
+            </div>
+
+            <textarea id="scenario1Text" oninput="updateWordCount('scenario1Text', 'sc1Count')" rows="6" placeholder="Dear Jack, Thank you so much for the invitation..." class="w-full p-3 border border-slate-300 rounded-lg text-xs focus:ring-2 focus:ring-slate-800 focus:outline-none bg-white font-medium leading-relaxed"></textarea>
+          </div>
+
+          <div class="mt-3">
+            <div class="flex justify-between items-center text-[11px] text-slate-500 mb-2">
+              <span>Kelime: <b id="sc1Count" class="text-slate-900">0</b> (Hedef: 25–35)</span>
+              <button onclick="toggleModelAnswer('sc1Model')" class="text-indigo-600 hover:text-indigo-800 font-bold no-print text-[11px]">💡 Model Cevap</button>
+            </div>
+            <div id="sc1Model" class="hidden p-3 bg-emerald-50 border border-emerald-300 rounded-lg text-[11px] text-slate-800">
+              <p class="font-bold text-emerald-900 mb-1">Örnek 10/10 Cevap:</p>
+              <p class="italic">"Dear Jack, thank you so much for inviting me to your PlayStation gaming night! I would really love to come, but I can't make it this Friday. My cousin is arriving from Ankara, and our family is having a dinner together. Let's hang out next weekend! Best, Emre."</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- SCENARIO 2 -->
+        <div class="p-4 sm:p-5 border-2 border-slate-300 rounded-xl bg-slate-50/70 flex flex-col justify-between">
+          <div>
+            <div class="flex justify-between items-center mb-2">
+              <h3 class="font-bold text-xs sm:text-sm text-slate-900">Scenario 2: Invitation Notice</h3>
+              <span class="text-[11px] bg-red-100 text-red-700 px-2 py-0.5 rounded font-black">10 Puan</span>
+            </div>
+            
+            <div class="bg-amber-50 border-l-4 border-amber-500 p-2.5 rounded text-[11px] text-slate-700 mb-3 leading-relaxed">
+              <p><b>Durum:</b> Sınıf temsilcisisin. 8. sınıfa başlangıç kutlaması için Ekim ayının ikinci haftasında tüm sınıf için bir "Class Reunion Picnic" organize ediyorsun.</p>
+              <p class="mt-1 font-semibold text-slate-900"><b>Görev:</b> Gruba 30–40 kelimelik davet yaz: Etkinlik adı, tarih/saat, konum ve son bildirim tarihi (RSVP) içermelidir.</p>
+            </div>
+
+            <textarea id="scenario2Text" oninput="updateWordCount('scenario2Text', 'sc2Count')" rows="6" placeholder="Hello everyone! We are organizing a Class Reunion Picnic..." class="w-full p-3 border border-slate-300 rounded-lg text-xs focus:ring-2 focus:ring-slate-800 focus:outline-none bg-white font-medium leading-relaxed"></textarea>
+          </div>
+
+          <div class="mt-3">
+            <div class="flex justify-between items-center text-[11px] text-slate-500 mb-2">
+              <span>Kelime: <b id="sc2Count" class="text-slate-900">0</b> (Hedef: 30–40)</span>
+              <button onclick="toggleModelAnswer('sc2Model')" class="text-indigo-600 hover:text-indigo-800 font-bold no-print text-[11px]">💡 Model Cevap</button>
+            </div>
+            <div id="sc2Model" class="hidden p-3 bg-emerald-50 border border-emerald-300 rounded-lg text-[11px] text-slate-800">
+              <p class="font-bold text-emerald-900 mb-1">Örnek 10/10 Cevap:</p>
+              <p class="italic">"Hello everyone! We are organizing a Class Reunion Picnic to celebrate the start of the 8th grade. It will be on Sunday, October 11, from 11:30 AM to 03:30 PM at Pine Tree City Park. Please inform me until Friday, October 9. Hope to see you all!"</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- SCENARIO 3 -->
+        <div class="p-4 sm:p-5 border-2 border-slate-300 rounded-xl bg-slate-50/70 flex flex-col justify-between">
+          <div>
+            <div class="flex justify-between items-center mb-2">
+              <h3 class="font-bold text-xs sm:text-sm text-slate-900">Scenario 3: Preferences & Routines</h3>
+              <span class="text-[11px] bg-red-100 text-red-700 px-2 py-0.5 rounded font-black">10 Puan</span>
+            </div>
+            
+            <div class="bg-amber-50 border-l-4 border-amber-500 p-2.5 rounded text-[11px] text-slate-700 mb-3 leading-relaxed">
+              <p><b>Durum:</b> İngiliz mektup arkadaşın Lucas e-posta atarak günlük rutinlerini ve müzik/spor zevklerini sordu.</p>
+              <p class="mt-1 font-semibold text-slate-900"><b>Görev:</b> 35–45 kelimelik yanıt yaz: (1) Sıklık zarfı (usually vb.), (2) "crazy about" + sebep, (3) "can't stand" + sebep, (4) "prefer ... to ...".</p>
+            </div>
+
+            <textarea id="scenario3Text" oninput="updateWordCount('scenario3Text', 'sc3Count')" rows="6" placeholder="Dear Lucas, After school I usually do my homework..." class="w-full p-3 border border-slate-300 rounded-lg text-xs focus:ring-2 focus:ring-slate-800 focus:outline-none bg-white font-medium leading-relaxed"></textarea>
+          </div>
+
+          <div class="mt-3">
+            <div class="flex justify-between items-center text-[11px] text-slate-500 mb-2">
+              <span>Kelime: <b id="sc3Count" class="text-slate-900">0</b> (Hedef: 35–45)</span>
+              <button onclick="toggleModelAnswer('sc3Model')" class="text-indigo-600 hover:text-indigo-800 font-bold no-print text-[11px]">💡 Model Cevap</button>
+            </div>
+            <div id="sc3Model" class="hidden p-3 bg-emerald-50 border border-emerald-300 rounded-lg text-[11px] text-slate-800">
+              <p class="font-bold text-emerald-900 mb-1">Örnek 10/10 Cevap:</p>
+              <p class="italic">"Dear Lucas, after school, I usually do my homework and play football with my classmates. I am crazy about volleyball because it is energetic and fun. However, I can't stand heavy metal music; I find it unbearable and noisy. I always prefer listening to pop songs to rock music. Best, Zeynep."</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- FOOTER WITH TEACHER SIGNATURE STAMP -->
+    <footer class="border-t-2 border-slate-900 pt-5 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-600 gap-4">
+      <div class="space-y-1 text-center sm:text-left">
+        <p class="font-bold text-slate-800 text-sm">Good Luck! / Sınavınızda Başarılar Dileriz.</p>
+        <p class="text-[11px] text-slate-500">T.C. Millî Eğitim Bakanlığı 2026 Ölçme ve Değerlendirme Yönergesi ile Uyumludur.</p>
+      </div>
+      <div class="text-center sm:text-right border-2 border-dashed border-slate-400 p-3 rounded-xl w-56 bg-slate-50">
+        <p class="text-[10px] text-slate-700 font-extrabold uppercase tracking-wider">İngilizce Öğretmeni Kaşe / İmza</p>
+        <div class="h-8"></div>
+      </div>
+    </footer>
+
+  </main>
+
+  <!-- JAVASCRIPT LOGIC -->
+  <script>
+    const answers = {
+      trait: { trait1: 'D', trait2: 'C', trait3: 'B', trait4: 'A', trait5: 'E' },
+      pv: { pv1: 'back up', pv2: 'keep a secret', pv3: 'get on well with', pv4: 'count on', pv5: 'have a lot in common' },
+      pref: { pref1: 'keen on', pref2: 'unbearable', pref3: 'to', pref4: 'never', pref5: 'always' },
+      lgs: { lgs1: 'B', lgs2: 'C', lgs3: 'B', lgs4: 'B', lgs5: 'C' }
+    };
+
+    const lgsExplanations = {
+      lgs1: { text: '<b>Doğru: B (Chloe).</b> Chloe "I would love to be there, but my cousin is getting married... attend the wedding" diyerek geçerli bir <b>mazeret (excuse)</b> bildirmiştir. Denis sadece kişisel hoşnutsuzluğunu belirtmiştir.' },
+      lgs2: { text: '<b>Doğru: C.</b> Posterde katılımcıların milli parka okuldan nasıl gideceği (ulaşım yöntemi) bilgisi <b>yoktur</b> (Bu sebeple Emma grupta sormuştur).' },
+      lgs3: { text: '<b>Doğru: B.</b> Tablo 2\'de Rap müzik Erkeklerde de %30, Kızlarda da %30 oranındadır; eşit oranda popülerdir (equally popular).' },
+      lgs4: { text: '<b>Doğru: B (Aylin).</b> Kızların en yüksek aktivitesi Konserlere Katılmak (%38) ve en yüksek müzik tercihi Pop Müzik\'tir (%42). Aylin\'in tercihi grubuyla tam örtüşür.' },
+      lgs5: { text: '<b>Doğru: C.</b> Sam rock müziğin dayanılmaz ve gürültülü olduğunu söyleyince Kevin ona katılarak ("I totally agree") sakin klasik müziği övmüştür.' }
+    };
+
+    function updateWordCount(textareaId, countSpanId) {
+      const text = document.getElementById(textareaId).value.trim();
+      const words = text ? text.split(/\s+/).length : 0;
+      document.getElementById(countSpanId).innerText = words;
+    }
+
+    function toggleModelAnswer(id) {
+      const el = document.getElementById(id);
+      el.classList.toggle('hidden');
+    }
+
+    function toggleAnswerKey() {
+      const btn = document.getElementById('btnKeyText');
+      const isShowing = btn.innerText.includes('Gizle');
+      
+      if (isShowing) {
+        btn.innerText = 'Cevap Anahtarını Göster';
+        document.querySelectorAll('[id$="Exp"], [id$="Feedback"]').forEach(el => el.classList.add('hidden'));
+        document.querySelectorAll('[id$="Model"]').forEach(el => el.classList.add('hidden'));
+      } else {
+        btn.innerText = 'Cevap Anahtarını Gizle';
+        calculateScore(true);
+        document.querySelectorAll('[id$="Model"]').forEach(el => el.classList.remove('hidden'));
+      }
+    }
+
+    function calculateScore(isRevealingOnly = false) {
+      let score = 0;
+
+      // Part 1A: Traits (10 pts)
+      let traitCorrect = 0;
+      for (let i = 1; i <= 5; i++) {
+        if (document.getElementById('trait' + i).value === answers.trait['trait' + i]) traitCorrect++;
+      }
+      const traitScore = traitCorrect * 2;
+
+      // Part 1B: Phrasal Verbs (10 pts)
+      let pvCorrect = 0;
+      for (let i = 1; i <= 5; i++) {
+        const val = document.getElementById('pv' + i).value.trim().toLowerCase();
+        const expected = answers.pv['pv' + i];
+        if (val === expected || (expected === 'have a lot in common' && val.includes('common'))) pvCorrect++;
+      }
+      const pvScore = pvCorrect * 2;
+
+      // Part 1C: Preferences & Adverbs (15 pts)
+      let prefCorrect = 0;
+      for (let i = 1; i <= 5; i++) {
+        const selected = document.querySelector(`input[name="pref${i}"]:checked`);
+        if (selected && selected.value === answers.pref['pref' + i]) prefCorrect++;
+      }
+      const prefScore = prefCorrect * 3;
+
+      const totalVocab = traitScore + pvScore + prefScore;
+      score += totalVocab;
+
+      // Show Part 1 Feedbacks
+      const traitFb = document.getElementById('traitFeedback');
+      traitFb.classList.remove('hidden');
+      traitFb.className = 'mt-2 text-xs p-2.5 rounded ' + (traitScore === 10 ? 'bg-emerald-100 text-emerald-900' : 'bg-amber-100 text-amber-900');
+      traitFb.innerHTML = `<b>Kişilik Özellikleri:</b> ${traitScore} / 10 Puan. (Cevaplar: 1-D, 2-C, 3-B, 4-A, 5-E)`;
+
+      const pvFb = document.getElementById('pvFeedback');
+      pvFb.classList.remove('hidden');
+      pvFb.className = 'mt-2 text-xs p-2.5 rounded ' + (pvScore === 10 ? 'bg-emerald-100 text-emerald-900' : 'bg-amber-100 text-amber-900');
+      pvFb.innerHTML = `<b>Deyimler:</b> ${pvScore} / 10 Puan. (1: back up, 2: keep a secret, 3: get on well with, 4: count on, 5: have a lot in common)`;
+
+      const prefFb = document.getElementById('prefFeedback');
+      prefFb.classList.remove('hidden');
+      prefFb.className = 'mt-3 text-xs p-2.5 rounded ' + (prefScore === 15 ? 'bg-emerald-100 text-emerald-900' : 'bg-amber-100 text-amber-900');
+      prefFb.innerHTML = `<b>Teen Life:</b> ${prefScore} / 15 Puan. (1: keen on, 2: unbearable, 3: to, 4: never, 5: always)`;
+
+      // Part 2: LGS Questions (25 pts)
+      let lgsCorrect = 0;
+      for (let i = 1; i <= 5; i++) {
+        const selected = document.querySelector(`input[name="lgs${i}"]:checked`);
+        const expEl = document.getElementById(`lgs${i}Exp`);
+        expEl.classList.remove('hidden');
+
+        if (selected && selected.value === answers.lgs['lgs' + i]) {
+          lgsCorrect++;
+          expEl.className = 'mt-3 text-xs p-2.5 rounded-lg bg-emerald-50 text-emerald-900 border border-emerald-300';
+          expEl.innerHTML = `✅ <b>Doğru!</b> ${lgsExplanations['lgs' + i].text}`;
+        } else {
+          expEl.className = 'mt-3 text-xs p-2.5 rounded-lg bg-red-50 text-red-900 border border-red-300';
+          expEl.innerHTML = `❌ <b>Cevap: ${answers.lgs['lgs' + i]}.</b> ${lgsExplanations['lgs' + i].text}`;
+        }
+      }
+      const lgsScore = lgsCorrect * 5;
+      score += lgsScore;
+
+      // Part 3: Open-Ended Scenarios (Auto awarding 10 pts if attempted)
+      let writingScore = 0;
+      ['scenario1Text', 'scenario2Text', 'scenario3Text'].forEach(id => {
+        const words = document.getElementById(id).value.trim().split(/\s+/).filter(Boolean).length;
+        if (words >= 15) writingScore += 10;
+        else if (words >= 5) writingScore += 5;
+      });
+      score += writingScore;
+
+      // Update Subscores & Header
+      document.getElementById('subScoreVocab').innerText = `${totalVocab}/35`;
+      document.getElementById('subScoreLgs').innerText = `${lgsScore}/25`;
+      document.getElementById('subScoreWriting').innerText = `${writingScore}/30`;
+
+      document.getElementById('headerScoreBox').innerText = score;
+      document.getElementById('scoreBadge').innerText = score;
+      document.getElementById('scoreText').innerText = `${score} / 100 Puan`;
+
+      const banner = document.getElementById('scoreBanner');
+      banner.classList.remove('hidden');
+
+      const feedback = document.getElementById('scoreFeedback');
+      if (score >= 85) {
+        feedback.innerText = 'Tebrikler! LGS 1. ve 2. ünite kazanımlarına oldukça hâkimsin. Harika bir sonuç!';
+      } else if (score >= 70) {
+        feedback.innerText = 'Tebrikler, güzel bir skor! Yanlış yaptığın soruların açıklamalarını inceleyerek netlerini artırabilirsin.';
+      } else {
+        feedback.innerText = 'Eksik konuları pekiştirmek için yukarıdaki yeşil açıklamaları ve kelime kutularını tekrar gözden geçir.';
+      }
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function resetExam() {
+      if (confirm('Tüm yanıtları sıfırlamak istediğinize emin misiniz?')) {
+        document.querySelectorAll('input[type="text"], textarea').forEach(input => input.value = '');
+        document.querySelectorAll('select').forEach(sel => sel.value = '');
+        document.querySelectorAll('input[type="radio"]').forEach(r => r.checked = false);
+        document.querySelectorAll('[id$="Exp"], [id$="Feedback"]').forEach(el => el.classList.add('hidden'));
+        document.querySelectorAll('[id$="Model"]').forEach(el => el.classList.add('hidden'));
+        document.getElementById('scoreBanner').classList.add('hidden');
+        document.getElementById('headerScoreBox').innerText = '---';
+        document.getElementById('sc1Count').innerText = '0';
+        document.getElementById('sc2Count').innerText = '0';
+        document.getElementById('sc3Count').innerText = '0';
+      }
+    }
+  </script>
+</body>
+</html>
